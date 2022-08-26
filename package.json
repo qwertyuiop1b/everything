@@ -1,0 +1,22 @@
+{
+  "name": "everything",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cac": "^6.7.12",
+    "chalk": "^5.0.1",
+    "extract-zip": "^2.0.1",
+    "node-fetch": "^3.2.10",
+    "prompts": "^2.4.2",
+    "qs": "^6.11.0",
+    "shelljs": "^0.8.5"
+  }
+}

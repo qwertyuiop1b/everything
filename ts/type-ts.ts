@@ -121,4 +121,66 @@
 // type FunctionParamsType = MyParameters<typeof foo> // [arg1: string, arg2: number]
 
 
+// 2. get return type
+// type MyReturnType<T> =  T extends (...args) => infer R ? R : never
+// const fn = (v: boolean) => {
+//   if (v)
+//     return 1
+//   else
+//     return 2
+// }
+// type a = MyReturnType<typeof fn> // should be "1 | 2"
 
+
+
+
+// 15050 Omit
+// type MyOmit<T, K extends keyof T> = MyPick<T,MyExclude<keyof T, K>>
+// type MyExclude<T, U> = T extends U ? never : T
+// type MyPick<T, K extends keyof T> = {
+//   [P in K]: T[P]
+// }
+
+// interface Todo {
+//   title: string
+//   description: string
+//   completed: boolean
+// }
+
+// type TodoPreview = MyOmit<Todo, 'description' | 'title'>
+// type TodoKeys = MyExclude<"a" | "b" | "c", "a" >
+// const todo: TodoPreview = {
+//   completed: false,
+// }
+
+
+// 8 readOnly2
+// # 思路
+// 1. 类型收窄限定K必须在T里面，如果K不存在就给默认值keyof T
+// 2. 如果在K里面的通过in遍历加上readonly
+// 3. 如果不在k里面的通过交叉类型保持不变
+
+// interface Todo {
+//   title: string
+//   description: string
+//   completed: boolean
+// }
+// type MyOmit<T, R extends keyof T> = {
+//   // 通过as来remapping
+//   [P in keyof T as P extends R ? never : P]: T[P];
+// };
+// type MyReadonly2<T, K extends keyof T = keyof T> = MyOmit<T, K> & {
+//   readonly [P in K]: T[P];
+// };
+// const todo: MyReadonly2<Todo, 'title' | 'description'> = {
+//   title: "Hey",
+//   description: "foobar",
+//   completed: false,
+// }
+// todo.title = "Hello" // Error: cannot reassign a readonly property
+// todo.description = "barFoo" // Error: cannot reassign a readonly property
+// todo.completed = true // OK
+
+
+
+//

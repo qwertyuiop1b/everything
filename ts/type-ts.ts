@@ -1,4 +1,4 @@
-//1.
+//1. hello world
 // type HelloWord = string
 
 
@@ -59,10 +59,6 @@
 
 // type head1 = First<arr1> // expected to be 'a'
 // type head2 = First<arr2> // expected to be 3
-
-
-
-
 
 
 

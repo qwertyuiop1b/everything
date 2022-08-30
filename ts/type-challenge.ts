@@ -156,27 +156,73 @@
 // 2. 如果在K里面的通过in遍历加上readonly
 // 3. 如果不在k里面的通过交叉类型保持不变
 
-// interface Todo {
-//   title: string
-//   description: string
-//   completed: boolean
-// }
-// type MyOmit<T, R extends keyof T> = {
-//   // 通过as来remapping
-//   [P in keyof T as P extends R ? never : P]: T[P];
-// };
-// type MyReadonly2<T, K extends keyof T = keyof T> = MyOmit<T, K> & {
-//   readonly [P in K]: T[P];
-// };
-// const todo: MyReadonly2<Todo, 'title' | 'description'> = {
-//   title: "Hey",
-//   description: "foobar",
-//   completed: false,
-// }
-// todo.title = "Hello" // Error: cannot reassign a readonly property
-// todo.description = "barFoo" // Error: cannot reassign a readonly property
-// todo.completed = true // OK
+`interface Todo {
+  title: string
+  description: string
+  completed: boolean
+}
+type MyOmit<T, R extends keyof T> = {
+  // 通过as来remapping
+  [P in keyof T as P extends R ? never : P]: T[P];
+};
+type MyReadonly2<T, K extends keyof T = keyof T> = MyOmit<T, K> & {
+  readonly [P in K]: T[P];
+};
+const todo: MyReadonly2<Todo, 'title' | 'description'> = {
+  title: "Hey",
+  description: "foobar",
+  completed: false,
+}
+todo.title = "Hello" // Error: cannot reassign a readonly property
+todo.description = "barFoo" // Error: cannot reassign a readonly property
+todo.completed = true // OK
+`;
 
 
+// 9: deep readonly
+`
+type DeepReadonly<T> = {
+  readonly [ P in keyof T]: T[P] extends {[K: string]: any} ? DeepReadonly<T[P]> : T[P] 
+}
+type X = { 
+  x: { 
+    a: 1
+    b: 'hi'
+  }
+  y: 'hey'
+}
 
-//
+let a: DeepReadonly<X> = {
+  x: { 
+    a: 1,
+    b: 'hi',
+  },
+  y: 'hey'
+}
+a.x.b = 3
+a.x = "go"
+`;
+
+
+// 10 tuple to union
+`
+type TupleToUnion<T extends any[]> = T[number] extends infer TItem ? TItem : never
+type Arr = ['1', '2', '3']
+type Test = TupleToUnion<Arr> // expected to be '1' | '2' | '3'
+`;
+
+
+// 12 chainable option
+declare const config: Chainable
+const result = config
+  .option('foo', 123)
+  .option('name', 'type-challenges')
+  .option('bar', { value: 'Hello World' })
+  .get()
+
+type Chainable<T = {}> = {
+  option<K extends string, V>(key: K, value: V): Chainable<
+    (K extends keyof T ? Omit<T, K> : T) & Record<K, V>
+  >
+  get(): T
+}

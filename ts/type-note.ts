@@ -89,9 +89,9 @@ interface Dog extends Animal {
 type A = 1 | 2 | 3;
 type B = 2 | 3;
 
-let a: A;
-let b: B;
-a = b;
+// let a: A;
+// let b: B;
+// a = b;
 
 type AnimalFn = (arg: Animal) => void;
 type DogFn = (arg: Dog) => void;

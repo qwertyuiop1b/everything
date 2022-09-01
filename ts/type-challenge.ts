@@ -213,6 +213,7 @@ type Test = TupleToUnion<Arr> // expected to be '1' | '2' | '3'
 
 
 // 12 chainable option
+`
 declare const config: Chainable
 const result = config
   .option('foo', 123)
@@ -225,4 +226,58 @@ type Chainable<T = {}> = {
     (K extends keyof T ? Omit<T, K> : T) & Record<K, V>
   >
   get(): T
-}
+}`;
+
+
+
+// 15 last of Array
+// type Last<T extends any[]> = T extends [...infer R, infer R2] ? R2 : never
+// type arr1 = ['a', 'b', 'c']
+// type arr2 = [3, 2, 1]
+
+// type tail1 = Last<arr1> // expected to be 'c'
+// type tail2 = Last<arr2> // expected to be 1
+
+
+
+// 16 Pop
+// type Pop<T extends any[]> = T extends [...infer L, infer last] ? L : never
+// type arr1 = ['a', 'b', 'c', 'd']
+// type arr2 = [3, 2, 1]
+
+// type re1 = Pop<arr1> // expected to be ['a', 'b', 'c']
+// type re2 = Pop<arr2> // expected to be [3, 2]
+
+
+
+// 20 Promise.all
+
+/**
+ * [P in keyof T]          ===> 
+ * T[number]               ===>  the element type of the array as T[number]
+*/
+declare function PromiseAll<T extends readonly any[]>(values: readonly [...T]):Promise<
+  {[P in keyof T]:  T[P] extends Promise<infer R> ? R : T[P]}
+>
+
+declare function PromiseAll2<T extends readonly any[]>(values: readonly [...T]):Promise<
+   T[number] extends Promise<infer R> ? R : T[number]
+>
+type PromiseAll3<T extends readonly any[]> = { [P in keyof T]: T[P] extends Promise<infer R> ? R : T[P]}
+
+const promise1 = Promise.resolve(3);
+const promise2 = 42;
+const promise3 = new Promise<string>((resolve, reject) => {
+  setTimeout(resolve, 100, 'foo');
+});
+
+// expected to be `Promise<[number, 42, string]>`
+const p = PromiseAll([promise1, promise2, promise3] as const)
+const p2 = PromiseAll2([promise1, promise2, promise3] as const)
+const p3: PromiseAll3<[ typeof promise1, typeof promise2, typeof promise3]> = [1, 42, "hello"]
+
+
+type testArray = string[] | number[] | boolean[]
+type test2Array = testArray[number]
+
+

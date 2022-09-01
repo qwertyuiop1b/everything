@@ -11,7 +11,6 @@ const animate = () => {
 `````````;
 
 // 2 ==>
-
 const fps = 30;
 let now = null;
 let then = Date.now();

@@ -36,38 +36,27 @@
     <img class="lazy" data-src="https://ik.imagekit.io/demo/img/image10.jpeg?tr=w-400,h-300" />
   </div>
   <script>
-    // 不能用querySelectorsAll()
-    const imgElts = document.getElementsByClassName("lazy")
-    let timerId = null
-    function lazyload() {
-      if (timerId) {
-        clearTimeout(timerId)
-      }
+    // https://developer.mozilla.org/zh-CN/docs/Web/API/Intersection_Observer_API
+    const observer = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          const image = entry.target
+          image.src = image.dataset.src
+          image.classList.remove("lazy")
+          observer.unobserve(image)
+        }
+      })
 
-      timerId = setTimeout(() => {
-        Array.from(imgElts).forEach((elt, idx, ary) => {
-          console.log(ary.length)
-          const offsetTop = elt.offsetTop
-          console.log(window.pageYOffset + window.innerHeight)
 
-          if (window.pageYOffset + window.innerHeight >= offsetTop) {
-            elt.setAttribute("src", elt.getAttribute("data-src"))
-            elt.classList.remove("lazy")
-          }
-
-          if (imgElts.length === 0) {
-            console.log("已经全部加载了....")
-            document.removeEventListener("scroll", lazyload)
-            window.removeEventListener("resize", lazyload)
-            window.removeEventListener("orientationchange", lazyload)
-          }
-        })
-      }, 30)
-    }
-
-    document.addEventListener("scroll", lazyload)
-    window.addEventListener("resize", lazyload)
-    window.addEventListener("orientationchange", lazyload)
+    }, {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0
+    })
+    const elts = document.querySelectorAll("img.lazy")
+    elts.forEach(elt => {
+      observer.observe(elt)
+    })
   </script>
 </body>
 

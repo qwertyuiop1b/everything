@@ -143,7 +143,6 @@ type Eg1 = [string, number]
 // infer 实现一个推到数组所有元素的类型
 type FalttenArray<T extends any[]> = T extends Array<infer P> ? P : never
 
-
 type Faltten1 = FalttenArray<string[] | number[]>
 
 
@@ -173,6 +172,32 @@ type P2 = MyConstructorParameters<typeof People2>
 
 
 
+// 重映射 as
+type changeToFn<T> = {
+  [K in keyof T as `get${string & K}`]: () => T[K]
+};
+
+type Person4 = {
+    Name: string;
+    [1]: number;
+    age: number;
+}
+// type personFn = {
+//     getName: () => string;
+//     getage: () => number;
+// }
+type personFn = changeToFn<Person4>;
+
+
+type RemoveKey<T, K> = {
+  [P in keyof T as Exclude<P, K>]: T[P]
+}
+
+
+
 
 // 后面剩下的todo
+
+
+
 

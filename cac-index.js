@@ -31,7 +31,6 @@ function cmdOpt() {
   cli.parse()
 }
 
-
 function brackets() {
   cli
     .command("deploy <folder>", "Deploy a folder to AWS")

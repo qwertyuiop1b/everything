@@ -13,10 +13,14 @@
   "dependencies": {
     "cac": "^6.7.12",
     "chalk": "^5.0.1",
+    "chokidar": "^3.5.3",
     "extract-zip": "^2.0.1",
     "node-fetch": "^3.2.10",
     "prompts": "^2.4.2",
     "qs": "^6.11.0",
     "shelljs": "^0.8.5"
+  },
+  "devDependencies": {
+    "typescript": "^4.8.2"
   }
 }

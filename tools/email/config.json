@@ -1,0 +1,12 @@
+{
+  "imap": {
+    "user": "xxxx",
+    "password": "xxxx",
+    "host": "imap.mxhichina.com",
+    "port": 993,
+    "tls": true
+  },
+  "downloads": {
+    "directory": "./download"
+  }
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    const sk = new SharedWorker('./workers/sharedWorker.js')
+
+    // 如果用onmessage监听的话，不需要调用port.start()，如果用addEventlistener(),需调用port.start()
+
+
+    // sk.port.onmessage = function(evt) {
+    //   const message = evt.data
+    //   console.log(message, typeof message)
+    // }
+
+    sk.port.addEventListener('message', evt => {
+      console.log('message', evt.data);
+
+    })
+
+    sk.port.start()
+
+    sk.port.onmessageerror = function(evt) {
+      console.log('error', evt);
+    }
+
+
+    // sk.port.postMessage('it lives')
+
+  </script>
+</body>
+</html>

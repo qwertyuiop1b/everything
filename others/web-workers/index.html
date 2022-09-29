@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>web worker</title>
+</head>
+
+<body>
+  <button id="workerBtn">启动web worker【】</button>
+  <button id="stopWorkerBtn">停止web worker【】</button>
+  <script>
+    const workerBtn = document.querySelector("#workerBtn")
+    const stopWorkerBtn = document.querySelector('#stopWorkerBtn')
+
+
+    // check Worker availability
+    if (typeof Worker !== undefined) {
+      // create a worker
+      const worker = new Worker('./workers/worker.js') 
+
+      worker.onmessage = e => {
+        console.log(e.data)
+        // worker.terminate()  worker file calls close func
+      }
+
+      // worker.postMessage(message, transferList) transferList转移所有权 【ArrayBuffer, ImageBitmap, MessagePort等】
+      // 例如: 发送一个大文件给worker时，如果拷贝一份，易损耗性能，所以把文件直接用transferList转移到worker中，
+      // 主线程无法访问该文件
+      const obj = {a: 1, b: 2}
+      // [transferList]的类型必须是transferable type
+      worker.postMessage(obj)
+      console.log(worker);
+    }
+
+    // 专用worker(dedicatedWorker):
+    // 共享worker(shareWorker): 
+    // service worker: 
+
+
+    // shareworker can't not run
+    // const sk = new SharedWorker('./workers/sharedWorker.js')
+    // workerBtn.onclick = e => {
+    //   console.log('click')
+    //   sk.port.start()
+    //   sk.port.postMessage('this is a shared worker')
+    // }
+
+    // sk.port.onmessage = e => {
+    //   console.log('from shared worker:', e.data)
+    // }
+
+
+
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,8 @@
+{
+  "extends": "@tsconfig/node16/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist"          // 输出目录
+  },
+  "include": ["src"],         // 编译目录
+  "exclude": ["node_modules"] // 排除编译
+}

@@ -1,0 +1,1 @@
+console.log("hello world, 你好世界")
